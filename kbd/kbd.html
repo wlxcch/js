@@ -15,13 +15,13 @@
     <footer></footer>
     <script>
         // 哈希就是数组
-    var keys = {
+     keys = {
         '0':{0:'q',1:'w',2:'e',3:'r',4:'t',5:'y',6:'u',7:'i',8:'o',9:'p',length:10},
         '1':{0:'a',1:'s',2:'d',3:'f',4:'g',5:'h',6:'j',7:'k',8:'l',length:9},
         '2':{0:'z',1:'x',2:'c',3:'v',4:'b',5:'n',6:'m',length:7},
         'length':3
     }
-    var hash={
+     hash={
         'q':'qq.com',
         'w':'weibo.com',
         'e':'ele.me',
@@ -35,6 +35,15 @@
         'a':'acfun.com',
         's':'sohu.com',
         'z':'zhihu.com',
+        //现在么有设置V M 等的快捷链接，但是在页面中编辑后，可以连接到位置，问题在于，
+        //页面刷新后就没有了，需要有数组将改动保存下来。
+    }
+
+    // hashInstorage=localStorage('zzz'||'') 这样得到的不是一个数组，用JSON.parse()改成数组，zzz这个桶有可能是空的
+    //取出localStorage中的内容，
+    hashInLocalStorage=JSON.parse(localStorage.getItem('zzz'||'null'))
+    if(hashInLocalStorage){
+        hash=hashInLocalStorage
     }
     // 循环插入keys['length']keys的长度即三个
     index=0
@@ -56,8 +65,12 @@
         // target是当前点击的按钮
         bt.onclick=function(xzkjcnxlkcjlk){
             console.log(xzkjcnxlkcjlk['target']['id'])
-            aaa=prompt('给我一个网址')//提示用户给一个网址
+            aaa=prompt('给我一个网址')//提示用户给一个网址.
             hash[key]=aaa//把给的网址更改到hash中
+            //变更后需要保存,用localStorage,否则刷新就没有了，当开始hash中么有预设时
+            // localStorage.setItem('uuu',hash）////////localStorage.setItem只能存字符串
+            localStorage.setItem('zzz',JSON.stringify(hash))
+            console.log(hash)
         } 
         z.appendChild(bt)
         x.appendChild(z)// 在x的元素中创建z即kbd,也就是在div中创建kbd
@@ -90,6 +103,7 @@
 
     //在新的网页中显示，响应键盘按下监听后，对应的网址
       window.open('http://'+website,'_blank')
+     
     }
 
 
