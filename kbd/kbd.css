@@ -2,9 +2,7 @@
 a{text-decoration:none;}
 kbd{
     border:1px solid red;
-    width: 4em;
-    height:4em;
-    display:inline-block;/* 内联元素成为块级元素才可以设置宽高 */
+    /* display:inline-block;内联元素成为块级元素才可以设置宽高 */
     text-transform:uppercase; /* 把小写转换成大写 */
     position:relative;
 }
@@ -18,10 +16,10 @@ kbd:hover>button{
     display:inline-block;
 }
 #divxxx > div:nth-child(2){
-   margin-left:1em;
+   margin-left:-22px;
 }
 #divxxx > div:nth-child(3){
-    margin-left:2em;
+    margin-left:-80px;
 }
 #divxxx{
     display:inline-block;

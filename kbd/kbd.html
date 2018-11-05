@@ -10,6 +10,28 @@
 <body>
     <header></header>
     <main>
+        <style>
+           .key1{
+               width:50px;
+               height:40px;
+               background: linear-gradient(to bottom, #292929 0%,#111111 100%); 
+               border:1px solid #373737;
+               color:#c5c5c5;
+               border-radius:6px;
+               box-shadow:0 0 0 1px #1a1b1c,0 0 0 2px #1f2020,0 3px 0 2px #080808;
+               display:inline-flex;
+               align-items:center;
+               justify-content:center;
+               font-size:18px;
+               font-family:Helvetica;
+           } 
+           .row1{
+               margin:20px;
+           }
+           .row1 .key1{
+               margin:0 10px;
+           }
+        </style>
         <div class="wrapper"  id="divxxx"></div>
     </main>
     <footer></footer>
@@ -65,6 +87,7 @@
     while(index<keys['length']){//取值为 0 1 2
         x=document.createElement('div')// 在id为y的元素中创建x即div,创建的元素必须为字符串
         divxxx.appendChild(x)
+        x.className='row1'
         row=keys[index]//第一个数组 第二个数组 第三个数组
         //在控制台打印 console.log(row)
         index2=0
@@ -74,6 +97,7 @@
         z=document.createElement('kbd')
         z.textContent=row[index2]//0-9 0-8 0-6 有先后之分，在z.appendChild(bt)之前bt.textContent中的内容才会显示，
         //如果z.textContent为空或者不写时，bt.textContent内容也可以显示
+        z.className='key1'
         bt=document.createElement('button')
         bt.textContent='编辑'
         bt.id=row[index2]
