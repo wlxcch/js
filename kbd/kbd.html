@@ -2,7 +2,7 @@
 <html lang="zh-Hans">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="'\1',-UA-Compatible" content="ie=edge">
     <title>键盘导航</title>
     <link rel="stylesheet" href="./kbd.css">
@@ -10,28 +10,6 @@
 <body>
     <header></header>
     <main>
-        <style>
-           .key1{
-               width:50px;
-               height:40px;
-               background: linear-gradient(to bottom, #292929 0%,#111111 100%); 
-               border:1px solid #373737;
-               color:#c5c5c5;
-               border-radius:6px;
-               box-shadow:0 0 0 1px #1a1b1c,0 0 0 2px #1f2020,0 3px 0 2px #080808;
-               display:inline-flex;
-               align-items:center;
-               justify-content:center;
-               font-size:18px;
-               font-family:Helvetica;
-           } 
-           .row1{
-               margin:20px;
-           }
-           .row1 .key1{
-               margin:0 10px;
-           }
-        </style>
         <div class="wrapper"  id="divxxx"></div>
     </main>
     <footer></footer>
@@ -95,15 +73,33 @@
         //现在的row是数组
         while(index2<row['length']){//10 9 7
         z=document.createElement('kbd')
-        z.textContent=row[index2]//0-9 0-8 0-6 有先后之分，在z.appendChild(bt)之前bt.textContent中的内容才会显示，
-        //如果z.textContent为空或者不写时，bt.textContent内容也可以显示
+        span=document.createElement('span')
+        span.textContent=row[index2]//0-9 0-8 0-6 有先后之分，在z.appendChild(bt)之前bt.textContent中的内容才会显示，
+        //如果span.textContent为空或者不写时，bt.textContent内容也可以显示
+        z.appendChild(span)
+        span.className='text'
         z.className='key1'
         bt=document.createElement('button')
         bt.textContent='编辑'
         bt.id=row[index2]
-        // target是当前点击的按钮
+        img1=document.createElement('img')
+        if(hash[row[index2]]){
+            img1.src='http://'+ hash[row[index2]]+'/favicon.ico'||'https://'+ hash[row[index2]]+'/favicon.ico'
+        }
+        else{
+            img1.src="./wenhao.png"
+        }
+        img1.onerror=function(xxx){
+            // console.log("下载失败")
+            // console.log(xxx) 可以打印出错误的事件，具体的内容，可以查看对象
+            //例如控制台显示：Event 点击查看全部
+            //Event {isTrusted: true, type: "error", target: img, currentTarget: img, eventPhase: 2, …}
+            xxx.target.src="./wenhao.png"
+        }
+        // xzkjcnxlkcjlk['target']就是用户点击的元素
         bt.onclick=function(xzkjcnxlkcjlk){
-            console.log(xzkjcnxlkcjlk['target']['id'])
+            bt2=xzkjcnxlkcjlk['target']['id']
+            img2=bt2.previousSibling
             aaa=prompt('给我一个网址')//提示用户给一个网址.
             hash[key]=aaa//把给的网址更改到hash中
             //变更后需要保存,用localStorage,否则刷新就没有了，当开始hash中么有预设时
@@ -111,6 +107,7 @@
             localStorage.setItem('zzz',JSON.stringify(hash))
             console.log(hash)
         } 
+        z.appendChild(img1)
         z.appendChild(bt)
         x.appendChild(z)// 在x的元素中创建z即kbd,也就是在div中创建kbd
         index2=index2+1
