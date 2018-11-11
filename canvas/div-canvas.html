@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="zh-hans">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+    *{margin:0;padding:0；}
+    /* body默认有8px外边距 */
+    #canvas {
+        background:green;
+        height:100vh;
+        position:relative;
+    }
+    </style>
+</head>
+<body>
+    
+    <div id='canvas'>浏览器对鼠标不能快速时刻监听，所以当你移动鼠标很快时，出现的不是线，中间会有间隔。所以画画不用div，用canvas有专门的标签</div>
+    <script>
+          var div=document.getElementById('canvas')
+          var painting=false
+        //鼠标按下去
+        div.onmousedown=function(a){
+            // console.log(a)
+            painting=true
+            var x=a.clientX
+            var y=a.clientY
+            var divA=document.createElement('div')
+            divA.style="width:6px;height:6px;background:black;border-radius:3px;"+
+            "position:absolute;left:"+(x-3)+"px;"+"top:"+(y-3)+"px;"
+            //默认小圆点显示在鼠标箭头的右下角，因为小圆点的定位就是鼠标点击的位置left:"+x+"px，
+            //所以减去3px，让小圆点显示在鼠标箭头的上面，简单的运算让圆心到箭头位置。
+            div.appendChild(divA)
+         }
+        //鼠标在动
+        div.onmousemove=function(a){
+            // console.log(a)
+          if(painting){
+            var x=a.clientX
+            var y=a.clientY
+            var divA=document.createElement('div')
+            divA.style="width:6px;height:6px;background:black;border-radius:3px;"+
+            "position:absolute;left:"+(x-3)+"px;"+"top:"+(y-3)+"px;"
+            //默认小圆点显示在鼠标箭头的右下角，因为小圆点的定位就是鼠标点击的位置left:"+x+"px，
+            //所以减去3px，让小圆点显示在鼠标箭头的上面，简单的运算让圆心到箭头位置。
+            div.appendChild(divA)
+          }else{
+
+          }
+           
+        }
+        //松开鼠标
+        div.onmouseup=function(z){
+            // console.log(1)
+            painting=false
+        }
+    </script>
+</body>
+</html>
