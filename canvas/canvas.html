@@ -13,65 +13,91 @@
      /* height:100vh; */
      /* 画布的大小是由宽高决定的，设置100vh时，画布会整体缩放，按着宽高整体比例变大， */
  }
+ button{
+     position:fixed;
+     bottom:0;
+     left:0;
+       }
 </style>
 <body>
     <!-- canvas可以设置宽高，和img差不多，不会因为元素被设置成block就变成块元素 -->
     <canvas id="xxx" width="400px" height="400px"></canvas>
+    <button id="eraser">橡皮檫</button>
     <script>
         var yyy = document.getElementById('xxx');
         var context = yyy.getContext('2d');//获取yyy的上下文。获取之后就可以画画了
-        context.fillStyle = 'red';//填充的颜色，先设置笔的颜色，否则默认是黑色的，
-        context.fillRect(10, 10, 100, 100);//填充矩形。没有设置颜色直接t画矩形，是黑色的，再设置颜色是没有用的。
+        ///////////////////////////实验画填充矩形和描边/////////////////////////////////////////////////////
+            // context.fillStyle = 'red';//填充的颜色，先设置笔的颜色，否则默认是黑色的，
+            // context.fillRect(10, 10, 100, 100);//填充矩形。没有设置颜色直接t画矩形，是黑色的，再设置颜色是没有用的。
+            
+            // context.strokeStyle = 'yellow';//描边的颜色。跟填充颜色的样式没有关系
+            // context. strokeRect(110, 110, 200, 200);//描边矩形
+
+            // context.clearRect(50,50,10,10)//类似于橡皮擦，把从50，50位置开始，宽度为10高度为10的矩形挖开去除
         
-        context.strokeStyle = 'yellow';//描边的颜色。跟填充颜色的样式没有关系
-        context. strokeRect(110, 110, 200, 200);//描边矩形
+            // context.fillStyle='red'
+            // context.beginPath();//需要说明一下要开始画了
+            // context.moveTo(350,350);
+            // context.lineTo(400,350);
+            // context.lineTo(400,400);
+            // context.fill();//需要填充一下才会出来三角形
 
-        context.clearRect(50,50,10,10)//类似于橡皮擦，把从50，50位置开始，宽度为10高度为10的矩形挖开去除
+            // context.fillStyle='black'//如果不写填充颜色，默认跟上次填充的颜色是一样的
+            // // drawCircle(200,50,20)//画一个圆，下面是画圆的函数
+            // // 画圆的函数
+///////////////////////////////////////////////////////////////////////////////
+        
+        //优化代码用这个函数代替下面的代码
+        autocanvassize(yyy)
+        listenToMouse(yyy)
+
+        
+        
+        var eraserEnabled=false
+        eraser.onclick=function(){
+            eraserEnabled=!eraserEnabled
+            if(eraserEnabled){
+                eraser.textContent="画笔"
+            }else{
+                eraser.textContent="橡皮擦"
+            }
+        }
+        ///////////自定义函数///////////////////////
+        function autocanvassize(canvas){
+        canvasize()
+        // var pageWidth=document.documentElement.clientWidth
+        // var pageHeight=document.documentElement.clientHeight
+        // yyy.width=pageWidth
+        // yyy.height=pageHeight
+
+        //此时改变窗口大小，会出现滚动条
+        //监听用户如果改变窗口大小时，让画板依然占满全屏，就不会有滚动条
+        //弊端，当监听窗口口，改变大小成全屏，原来画的内容会消失
+        window.onresize=function(){
+            //优化代码用这个函数代替下面的代码
+            canvasize()
+            // var pageWidth=document.documentElement.clientWidth
+            // var pageHeight=document.documentElement.clientHeight
+            // yyy.width=pageWidth
+            // yyy.height=pageHeight
     
-        context.fillStyle='red'
-        context.beginPath();//需要说明一下要开始画了
-        context.moveTo(350,350);
-        context.lineTo(400,350);
-        context.lineTo(400,400);
-        context.fill();//需要填充一下才会出来三角形
+        }
+        function canvasize(){
+            var pageWidth=document.documentElement.clientWidth
+            var pageHeight=document.documentElement.clientHeight
 
-        context.fillStyle='black'//如果不写填充颜色，默认跟上次填充的颜色是一样的
-        // drawCircle(200,50,20)//画一个圆，下面是画圆的函数
-        // 画圆的函数
-        function drawCircle(x,y,radius){
+           canvas.width=pageWidth
+           canvas.height=pageHeight
+        }
+       }
+       function drawCircle(x,y,radius){
             context.beginPath();//需要说明一下要开始画了
             //画弧度，，画一个圆心为200.50，半径为20，从0度开始画，360不是度数，是弧度2*PI表示360度
             // context.arc(200,50,20,0,Math.PI);//180度的弧
-            context.fillStyle='red'
+            context.fillStyle='black'
             context.arc(x,y,radius,0,2*Math.PI);//360度的弧
             // context.fill();//需要填充一下才会出现圆形
             context.fill();
-        }
-        var painting=false
-        var LastPosition={x:undefined,y:undefined}
-        //因为画布上画的速度快了，浏览器不能监听，所以在上一个点，
-        //到现在这个点之间画一个线。视觉上就不会间断显示，上一个点也是最后一个点也要适时的更新,
-
-        //鼠标点击的时候画圆，canvas里不用定位，默认相对定位
-        yyy.onmousedown=function(aaa){
-            painting=true
-            var x=aaa.clientX   //相对视口的位置，不是相对画布的位置
-            var y=aaa.clientY   //相对视口的位置，不是相对画布的位置
-            lastPoint={"x":x,"y":y}
-            drawCircle(x,y,10)   //画圆时，是按着画布的位置画的，所以点击的时候会有偏差，当body html有border和margin时
-        }
-        yyy.onmousemove=function(aaa){
-           if(painting){
-                var x=aaa.clientX   //相对视口的位置，不是相对画布的位置
-                var y=aaa.clientY   //相对视口的位置，不是相对画布的位置
-                var newPoint={"x":x,"y":y}
-                drawCircle(x,y,10)   //画圆时，是按着画布的位置画的，所以点击的时候会有偏差，当body html有border和margin时
-                drawLine(lastPoint.x, lastPoint.y,newPoint.x,newPoint.y)
-                lastPoint=newPoint //不断更新画笔的最后一个点，
-           }
-        }
-        yyy.onmouseup=function(aaa){
-          painting=false
         }
         function drawLine(x1,y1,x2,y2){
             context.beginPath();
@@ -82,6 +108,51 @@
             context.stroke()
             context.closePath()//终点
         }
+       function listenToMouse(canvas){    
+            var using=false
+            var lastPoint={x:undefined,y:undefined}
+            //因为画布上画的速度快了，浏览器不能监听，所以在上一个点，
+            //到现在这个点之间画一个线。视觉上就不会间断显示，上一个点也是最后一个点也要适时的更新,
+            canvas.onmousedown=function(aaa){
+                var x=aaa.clientX   //相对视口的位置，不是相对画布的位置
+                var y=aaa.clientY   //相对视口的位置，不是相对画布的位置
+                using=true//if和else都写了，都用到了，就提到外面
+                if(eraserEnabled){
+                    // using=true
+                    context.clearRect(x-5,y-5,10,10)}
+                    else{
+                    // using=true
+                    lastPoint={"x":x,"y":y}
+                    // drawCircle(x,y,1)  
+                    //画圆时，是按着画布的位置画的，所以点击的时候会有偏差，当body html有border和margin时
+            }  
+     
+            //鼠标点击的时候画圆，canvas里不用定位，默认相对定位
+       
+           canvas.onmousemove=function(aaa){
+                var x=aaa.clientX   //相对视口的位置，不是相对画布的位置
+                var y=aaa.clientY   //相对视口的位置，不是相对画布的位置
+
+                // 可以先判断using，没有用没有按下鼠标，就什么也不做，直接退出
+                if(!using){return}//没有用，就什么也不做
+                if(eraserEnabled){
+                    // if(using){context.clearRect(x-5,y-5,10,10)}    
+                    context.clearRect(x-5,y-5,10,10)}
+                    //  if(using){var newPoint={"x":x,"y":y}
+                else{
+                    var newPoint={"x":x,"y":y}
+                    context.clearRect(x-5,y-5,10,10)
+                
+                    // drawCircle(x,y,1)   //画圆时，是按着画布的位置画的，所以点击的时候会有偏差，当body html有border和margin时
+                    drawLine(lastPoint.x, lastPoint.y,newPoint.x,newPoint.y)
+                    lastPoint=newPoint} //不断更新画笔的最后一个点，
+                                
+            }
+          canvas.onmouseup=function(aaa){ using=false }
+      }
+       }
+        
+
     </script>
 </body>
 </html>
