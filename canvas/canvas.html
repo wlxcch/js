@@ -13,16 +13,24 @@
      /* height:100vh; */
      /* 画布的大小是由宽高决定的，设置100vh时，画布会整体缩放，按着宽高整体比例变大， */
  }
- button{
+ .actions{
      position:fixed;
      bottom:0;
      left:0;
        }
+ .actions > #brush{display:none;}
+ .actions.x > #eraser{display:none;}
+ .actions.x > #brush{display:inline-block;}
+ 
 </style>
 <body>
     <!-- canvas可以设置宽高，和img差不多，不会因为元素被设置成block就变成块元素 -->
     <canvas id="xxx" width="400px" height="400px"></canvas>
-    <button id="eraser">橡皮檫</button>
+    <div id="actions" class="actions">
+        <button id="eraser">橡皮檫</button>
+        <button id="brush">画笔</button>
+    </div>
+  
     <script>
         var yyy = document.getElementById('xxx');
         var context = yyy.getContext('2d');//获取yyy的上下文。获取之后就可以画画了
@@ -55,12 +63,20 @@
         
         var eraserEnabled=false
         eraser.onclick=function(){
-            eraserEnabled=!eraserEnabled
-            if(eraserEnabled){
-                eraser.textContent="画笔"
-            }else{
-                eraser.textContent="橡皮擦"
-            }
+            // eraserEnabled=!eraserEnabled
+            //一般不这么写，一般弄两个按钮，一个隐藏，一个显示
+
+            // if(eraserEnabled){
+            //     eraser.textContent="画笔"
+            // }else{
+            //     eraser.textContent="橡皮擦"
+            // }
+            eraserEnabled=true
+            actions.className='actions x'
+        }
+        brush.onclick=function(){
+            eraserEnabled=false
+            actions.className='actions'
         }
         ///////////自定义函数///////////////////////
         function autocanvassize(canvas){
@@ -141,7 +157,6 @@
                     //  if(using){var newPoint={"x":x,"y":y}
                 else{
                     var newPoint={"x":x,"y":y}
-                    context.clearRect(x-5,y-5,10,10)
                 
                     // drawCircle(x,y,1)   //画圆时，是按着画布的位置画的，所以点击的时候会有偏差，当body html有border和margin时
                     drawLine(lastPoint.x, lastPoint.y,newPoint.x,newPoint.y)
