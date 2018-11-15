@@ -57,7 +57,7 @@
         
         //优化代码用这个函数代替下面的代码
         autocanvassize(yyy)
-        listenToMouse(yyy)
+        listenToUser(yyy)
 
         
         
@@ -124,12 +124,54 @@
             context.stroke()
             context.closePath()//终点
         }
-       function listenToMouse(canvas){    
+    //    function listenToMouse(canvas){ 
+     function listenToUser(canvas){   
             var using=false
             var lastPoint={x:undefined,y:undefined}
             //因为画布上画的速度快了，浏览器不能监听，所以在上一个点，
             //到现在这个点之间画一个线。视觉上就不会间断显示，上一个点也是最后一个点也要适时的更新,
-            canvas.onmousedown=function(aaa){
+        
+      if(document.body.ontouchstart!==undefined){
+          //触屏设备
+             yyy.ontouchstart=function(aaa){
+                var x=aaa.touches[0].clientX   //相对视口的位置，不是相对画布的位置
+                var y=aaa.touches[0].clientY   //相对视口的位置，不是相对画布的位置
+                using=true//if和else都写了，都用到了，就提到外面
+                if(eraserEnabled){
+                    // using=true
+                    context.clearRect(x-5,y-5,10,10)}
+                    else{
+                    // using=true
+                    lastPoint={"x":x,"y":y}
+                    // drawCircle(x,y,1)  
+                    //画圆时，是按着画布的位置画的，所以点击的时候会有偏差，当body html有border和margin时
+                     }  
+             }
+        yyy.ontouchmove=function(aaa){
+            console.log(aaa)
+             var x=aaa.touches[0].clientX    //相对视口的位置，不是相对画布的位置
+             var y=aaa.touches[0].clientY    //相对视口的位置，不是相对画布的位置
+
+                // 可以先判断using，没有用没有按下鼠标，就什么也不做，直接退出
+                if(!using){return}//没有用，就什么也不做
+                if(eraserEnabled){
+                    // if(using){context.clearRect(x-5,y-5,10,10)}    
+                    context.clearRect(x-5,y-5,10,10)}
+                    //  if(using){var newPoint={"x":x,"y":y}
+                else{
+                    var newPoint={"x":x,"y":y}
+                
+                    // drawCircle(x,y,1)   //画圆时，是按着画布的位置画的，所以点击的时候会有偏差，当body html有border和margin时
+                    drawLine(lastPoint.x, lastPoint.y,newPoint.x,newPoint.y)
+                    lastPoint=newPoint} //不断更新画笔的最后一个点，                    
+            }
+      yyy.ontouchend=function(aaa){
+        using=false 
+           }
+      }
+      else{
+          //非触屏设备
+          canvas.onmousedown=function(aaa){
                 var x=aaa.clientX   //相对视口的位置，不是相对画布的位置
                 var y=aaa.clientY   //相对视口的位置，不是相对画布的位置
                 using=true//if和else都写了，都用到了，就提到外面
@@ -163,10 +205,13 @@
                     lastPoint=newPoint} //不断更新画笔的最后一个点，
                                 
             }
-          canvas.onmouseup=function(aaa){ using=false }
-      }
+          canvas.onmouseup=function(aaa){ 
+               using=false  }
+          }
+      }   
        }
-        
+      
+          
 
     </script>
 </body>
