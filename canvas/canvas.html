@@ -4,33 +4,82 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="//at.alicdn.com/t/font_923624_d6zd3a6ubd4.js"></script>
     <title>Document</title>
 </head>
 <style>
-    *{margin:0;}
+    *{margin:0;padding:0;}
+    ol{list-style:none;}
  #xxx{
-     background:green;
+     background:white;
      /* height:100vh; */
      /* 画布的大小是由宽高决定的，设置100vh时，画布会整体缩放，按着宽高整体比例变大， */
  }
  .actions{
      position:fixed;
-     bottom:0;
+     top:0;
      left:0;
+     padding:20px;
        }
- .actions > #brush{display:none;}
+.actions svg{
+    width:2em;
+    height:2em;
+    margin:0 10px;
+}
+.actions svg.action{
+    fill:red;
+    transform:scale(1.5);
+    transition:all 0.5s;
+}
+ /* .actions > #brush{display:none;}
  .actions.x > #eraser{display:none;}
- .actions.x > #brush{display:inline-block;}
- 
+ .actions.x > #brush{display:inline-block;} */
+ .icon {
+       width: 1em; height: 1em;
+       vertical-align: -0.15em;
+       fill:black;
+       overflow: hidden;
+      }
+ .colors{
+     position:fixed;
+     top:60px;
+     left:28px;
+     /* border:1px solid black; */
+ }
+ .colors> li{
+     width:20px;
+     height:20px;
+     box-shadow: 0 0 3px rgb(0,0,0,.0.25);
+     margin:10px 0;
+     border-radius:50%;
+ }
+ .colors> li.red{background:red;}
+ .colors> li.green{background:green;}
+ .colors> li.blue{background:blue;}
+ .colors> li.action{
+     box-shadow: 0 0 3px rgb(0,0,0,.1);
+     transform:scale(1.5);
+     transition:all 0.3s;
+ }
 </style>
 <body>
     <!-- canvas可以设置宽高，和img差不多，不会因为元素被设置成block就变成块元素 -->
     <canvas id="xxx" width="400px" height="400px"></canvas>
     <div id="actions" class="actions">
-        <button id="eraser">橡皮檫</button>
-        <button id="brush">画笔</button>
+            <svg id="eraser1" class="icon" aria-hidden="true">
+                <use xlink:href="#icon-eraser"></use>
+            </svg>
+            <svg id="brush1" class="icon action" aria-hidden="true">
+                <use xlink:href="#icon-brush"></use>
+            </svg>
+            <!-- <button id="eraser">橡皮檫</button>
+            <button id="brush">画笔</button> -->
     </div>
-  
+    <ol class="colors" id="colors">
+        <li id="red" class="red action"></li>
+        <li id="green" class="green"></li>
+        <li id="blue" class="blue"></li>
+    </ol>
     <script>
         var yyy = document.getElementById('xxx');
         var context = yyy.getContext('2d');//获取yyy的上下文。获取之后就可以画画了
@@ -62,22 +111,51 @@
         
         
         var eraserEnabled=false
-        eraser.onclick=function(){
-            // eraserEnabled=!eraserEnabled
-            //一般不这么写，一般弄两个按钮，一个隐藏，一个显示
-
-            // if(eraserEnabled){
-            //     eraser.textContent="画笔"
-            // }else{
-            //     eraser.textContent="橡皮擦"
-            // }
-            eraserEnabled=true
-            actions.className='actions x'
-        }
-        brush.onclick=function(){
+        //用SVG图标代替按钮切换class属性
+        brush1.onclick=function(){
             eraserEnabled=false
-            actions.className='actions'
-        }
+            brush1.classList.add('action')
+            eraser1.classList.remove('action')
+            }
+        eraser1.onclick=function(){
+            eraserEnabled=true
+            eraser1.classList.add('action')
+            brush1.classList.remove('action')
+            }
+      red.onclick=function(){
+        context.strokeStyle='red'
+        red.classList.add('action')
+        green.classList.remove('action')
+        blue.classList.remove('action')
+      }  
+      green.onclick=function(){
+        context.strokeStyle='green'
+        green.classList.add('action')
+        red.classList.remove('action')
+        blue.classList.remove('action')
+      }
+      blue.onclick=function(){
+        context.strokeStyle='blue'
+        blue.classList.add('action')
+        red.classList.remove('action')
+        green.classList.remove('action')
+      }
+        // eraser.onclick=function(){
+        //     // eraserEnabled=!eraserEnabled
+        //     //一般不这么写，一般弄两个按钮，一个隐藏，一个显示
+
+        //     // if(eraserEnabled){
+        //     //     eraser.textContent="画笔"
+        //     // }else{
+        //     //     eraser.textContent="橡皮擦"
+        //     // }
+        //     eraserEnabled=true
+        //     actions.className='actions x'
+        // }
+        // brush.onclick=function(){
+        //     eraserEnabled=false
+        //     actions.className='actions'
+        // }
         ///////////自定义函数///////////////////////
         function autocanvassize(canvas){
         canvasize()
@@ -110,14 +188,14 @@
             context.beginPath();//需要说明一下要开始画了
             //画弧度，，画一个圆心为200.50，半径为20，从0度开始画，360不是度数，是弧度2*PI表示360度
             // context.arc(200,50,20,0,Math.PI);//180度的弧
-            context.fillStyle='black'
+            // context.fillStyle='black'
             context.arc(x,y,radius,0,2*Math.PI);//360度的弧
             // context.fill();//需要填充一下才会出现圆形
             context.fill();
         }
         function drawLine(x1,y1,x2,y2){
             context.beginPath();
-            context.strokeStyle='black'
+            // context.strokeStyle='black'
             context.moveTo(x1,y1)//起点
             context.lineWidth=5
             context.lineTo(x2,y2)
