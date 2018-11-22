@@ -4,12 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <script src="//at.alicdn.com/t/font_923624_d6zd3a6ubd4.js"></script>
+    <script src="//at.alicdn.com/t/font_923624_dhwb8xbtrvd.js"></script>
     <title>Document</title>
 </head>
 <style>
     *{margin:0;padding:0;}
     ol{list-style:none;}
+    body{overflow:hidden;}
  #xxx{
      background:white;
      /* height:100vh; */
@@ -53,6 +54,7 @@
      margin:10px 0;
      border-radius:50%;
  }
+ .colors> li.black{background:black;}
  .colors> li.red{background:red;}
  .colors> li.green{background:green;}
  .colors> li.blue{background:blue;}
@@ -60,6 +62,24 @@
      box-shadow: 0 0 3px rgb(0,0,0,.1);
      transform:scale(1.5);
      transition:all 0.3s;
+ }
+ .sizes{
+     position:fixed;
+     right:10px;
+     top:45px;
+ }
+ .sizes>.thin{
+     height:0;
+     width:20px;
+     border-top:5px solid black;
+ }
+ .sizes>.thick{
+     height:0;
+     width:20px;
+     border-top:10px solid red;
+ }
+ .sizes >li{
+     margin:4px 0;
  }
 </style>
 <body>
@@ -72,17 +92,30 @@
             <svg id="brush1" class="icon action" aria-hidden="true">
                 <use xlink:href="#icon-brush"></use>
             </svg>
+            <svg id="clear" class="icon" aria-hidden="true">
+               <use xlink:href="#icon-clear"></use>
+            </svg>
+            <svg id="save" class="icon" aria-hidden="true">
+                    <use xlink:href="#icon-save"></use>
+            </svg>
             <!-- <button id="eraser">橡皮檫</button>
             <button id="brush">画笔</button> -->
     </div>
     <ol class="colors" id="colors">
-        <li id="red" class="red action"></li>
+        <li id="black" class="black action"></li>
+        <li id="red" class="red"></li>
         <li id="green" class="green"></li>
         <li id="blue" class="blue"></li>
     </ol>
+    <ol class="sizes">
+        <li id="thin" class="thin"></li>
+        <li id="thick" class="thick"></li>
+    </ol>
     <script>
+        var lineWidth=5
         var yyy = document.getElementById('xxx');
         var context = yyy.getContext('2d');//获取yyy的上下文。获取之后就可以画画了
+       
         ///////////////////////////实验画填充矩形和描边/////////////////////////////////////////////////////
             // context.fillStyle = 'red';//填充的颜色，先设置笔的颜色，否则默认是黑色的，
             // context.fillRect(10, 10, 100, 100);//填充矩形。没有设置颜色直接t画矩形，是黑色的，再设置颜色是没有用的。
@@ -122,20 +155,43 @@
             eraser1.classList.add('action')
             brush1.classList.remove('action')
             }
+        clear.onclick=function(){
+             context.clearRect(0,0,yyy.width,yyy.height);
+        }
+        save.onclick= function(){
+            var url=yyy.toDataURL("image/png")
+            console.log(url)
+            var a=document.createElement('a')
+            document.body.appendChild(a)
+            a.href=url
+            a.download='我的画儿'
+            a.target="_blank"
+            a.click()
+        }
+      black.onclick=function(){
+          context.strokeStyle="black"
+          black.classList.add('action')
+          red.classList.remove('action')
+          green.classList.remove('action')
+          blue.classList.remove('action')
+      }   
       red.onclick=function(){
         context.strokeStyle='red'
+        black.classList.remove('action')
         red.classList.add('action')
         green.classList.remove('action')
         blue.classList.remove('action')
       }  
       green.onclick=function(){
         context.strokeStyle='green'
+        black.classList.remove('action')
         green.classList.add('action')
         red.classList.remove('action')
         blue.classList.remove('action')
       }
       blue.onclick=function(){
         context.strokeStyle='blue'
+        black.classList.remove('action')
         blue.classList.add('action')
         red.classList.remove('action')
         green.classList.remove('action')
@@ -156,6 +212,16 @@
         //     eraserEnabled=false
         //     actions.className='actions'
         // }
+    thin.onclick=function(){
+        lineWidth=5
+    }
+    thick.onclick=function(){
+        lineWidth=10
+    }
+
+
+
+
         ///////////自定义函数///////////////////////
         function autocanvassize(canvas){
         canvasize()
@@ -197,7 +263,7 @@
             context.beginPath();
             // context.strokeStyle='black'
             context.moveTo(x1,y1)//起点
-            context.lineWidth=5
+            context.lineWidth=lineWidth
             context.lineTo(x2,y2)
             context.stroke()
             context.closePath()//终点
