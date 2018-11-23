@@ -13,6 +13,9 @@
     body{overflow:hidden;}
  #xxx{
      background:white;
+     position:fixed;
+     top:0;
+     left:0;
      /* height:100vh; */
      /* 画布的大小是由宽高决定的，设置100vh时，画布会整体缩放，按着宽高整体比例变大， */
  }
@@ -112,6 +115,10 @@
         <li id="thick" class="thick"></li>
     </ol>
     <script>
+        //禁止手机上屏幕滑动,这个不能用
+        // document.body.addEventListener('touchstart',function(eee){
+        //     eee.preventDefault()
+        // })
         var lineWidth=5
         var yyy = document.getElementById('xxx');
         var context = yyy.getContext('2d');//获取yyy的上下文。获取之后就可以画画了
