@@ -38,7 +38,7 @@
                var bt2=xzkjcnxlkcjlk['target']
                var img2=bt2.previousSibling
                var key=bt2['id']//q w e r
-               var x=prompt('给我一个网址')//提示用户给一个网址.
+               var x=prompt('给我一个不加http的网址，个别网站图标可能不让访问')//提示用户给一个网址.
                hash[key]=x //把给的网址更改到hash中
                //变更后需要保存,用localStorage,否则刷新就没有了，当开始hash中么有预设时
                // localStorage.setItem('uuu',hash）////////localStorage.setItem只能存字符串

@@ -1,8 +1,16 @@
 *{margin:0； padding:0;}
 a{text-decoration:none;}
+#sm{
+    color:red;
+    font-size: 30px;
+    position: absolute;
+    top:150px;
+    left:80px;
+}
 body{
     background:grey url(./wall.jpg) no-repeat center center;
     background-size:cover;
+    position: relative;
 }
 kbd{
     border:1px solid red;
